@@ -5,6 +5,7 @@ import tkinter as tk
 from tkinter import font, CENTER, messagebox
 from typing import List
 import sys
+import os
 
 
 # 0 = player 1; 1 = player 2 / PC
@@ -291,6 +292,10 @@ class Game:
         board_2 = self.init_board_player(main_frame, piece_image[1], 710, 28, [-65, 65], 1) #jolvan a magassag
 
         board = [board_1, board_2]
+        #delete old file at every start
+        if os.path.exists("moves.txt"):
+            os.remove("moves.txt")
+
         return board
 
     @staticmethod
@@ -708,18 +713,23 @@ class Game:
         list_btn_option = []
 
         self.update_board(player_id, taken, column)
+        f = open("moves.txt", "a")
 
         if taken != -5:
             val_zar = taken - column
             dice.remove(val_zar)
             if(player_id==1):
+                #terminalra iras
                 print(str(player_id)+ ":")
                 print(-(taken-23))
                 print(-(column-23))
+                #fileba iras
+                f.write(str(player_id) + ":" + str(-(taken-23)) + "->" + str(-(column-23)) + '\n')
             else:
                 print(str(player_id)+ ":")
                 print(taken)
                 print(column)
+                f.write(str(player_id) + ":" + str(taken) + "->" + str(column) + '\n')
         else:
             val_zar = column + 1
             dice.remove(val_zar)
@@ -733,12 +743,21 @@ class Game:
               print(str(player_id)+ ":")
               print(-(taken-23))
               print(-(column-23))
+              if((-(taken-23)) > 23 or (-(taken-23))<0):
+                  f.write(str(player_id) + ":" + 'x' + "->" + str(-(column - 23)) + '\n')
+              else:
+                  f.write(str(player_id) + ":" + str(-(taken-23)) + "->" + str(-(column - 23)) + '\n')
             else:
                 print('beallt:')
                 print(str(player_id)+ ":")
                 print(taken)
                 print(column)
+                if(taken > 23 or taken <0):
+                    f.write(str(player_id) + ":" + 'x' + "->" + str(column) + '\n')
+                else:
+                    f.write(str(player_id) + ":" + str(taken) + "->" + str(column) + '\n')
 
+        f.close()
         global turn
         if len(dice) == 0:
             if turn == 0:
