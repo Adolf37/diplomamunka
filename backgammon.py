@@ -24,13 +24,6 @@ global roll_button
 class Game:
     """
         This class contains almost all methods needed to play backgammon in 2 players or in player vs pc mode.
-
-        Here are some videos that show how this app works:
-        https://youtu.be/ml5f4amx1wM
-        https://youtu.be/utUk00iJC-I
-        https://youtu.be/ZC16NrcVrdM
-
-        For more information about the code, check each method down below!
     """
 
     def __init__(self, window, main_frame, player1, player2) -> None:
@@ -671,11 +664,7 @@ class Game:
             if column_pus <= 11:
                 self.board[player_id][23 - column_pus][0][-1].place(x=self.board[player_id][23 - column_pus][1],
                                                                     y=(self.board[player_id][23 - column_pus][2] +
-                                                                       poz_id[
-                                                                           0] * (-1) * (
-                                                                               len(self.board[player_id][
-                                                                                       23 - column_pus][
-                                                                                       0]) - 1)))
+                                                                       poz_id[0] * (-1) * (len(self.board[player_id][23 - column_pus][0]) - 1)))
                 if len(self.board[player_id][23 - column_pus][0]) > 5:
                     self.replace_piece(self.board[player_id][23 - column_pus], 23 - column_pus, 0)
                 else:
@@ -887,6 +876,9 @@ class Game:
         :param column: column number to know from where the piece is removed
         :return: None
         """
+
+        
+
         self.board[player_id][column][0][-1].destroy()
         self.board[player_id][column][0].pop()
         self.stats[player_id][1] += 1
@@ -913,8 +905,23 @@ class Game:
             index.destroy()
         for index in range(0, len(list_btn_option)):
             list_btn_option.pop()
-
+        
+        
+        
         self.show_player_stats(self.main_frame, self.stats)
+
+        f = open("moves.txt", "a")
+        if player_id == 1:
+                #terminalra iras
+                print(str(player_id)+ ":")
+                print(-(column-23))
+                #fileba iras
+                f.write(str(player_id) + ":" + str(-(column-23)) + "->" + "end" + '\n')
+        else:
+                print(str(player_id)+ ":")
+                print(column)
+                f.write(str(player_id) + ":" + str(column) + "->" + "end" + '\n')
+        f.close()
 
         winner = who_won(self)
         if winner > 0:
