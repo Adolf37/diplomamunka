@@ -6,6 +6,7 @@ from tkinter import font, CENTER, messagebox
 from typing import List
 import sys
 import os
+import shutil
 
 
 # 0 = player 1; 1 = player 2 / PC
@@ -35,15 +36,25 @@ class Game:
         :param player1: the name of the player that starts the game (always "player 1")
         :param player2: the name of the other player (either "player 2", either "PC")
         """
+
+        if player1 == "replay":
+            print('replay')
+            text_font = font.Font(size=14)
+            forward = tk.Button(main_frame, text="->", font=text_font,
+                                bg='#4e555f', fg='white', border=2, command=lambda: self.elore())
+            forward.place(x=300, y=385)
+
         self.clicked = []
         self.window = window
         self.main_frame = main_frame
         self.name = [player1, player2]
         self.stats = [[0, 0], [0, 0]]
         self.color = self.color_choosing()
-        self.label_list = self.show_player_info(main_frame, self.name, self.color)
+        self.label_list = self.show_player_info(
+            main_frame, self.name, self.color)
         self.show_player_stats(main_frame, self.stats)
         self.board = self.init_board(main_frame)
+        self.fileRow = 1
 
     @staticmethod
     def show_player_info(main_frame, player, color):
@@ -66,11 +77,13 @@ class Game:
 
         text_font = font.Font(size=17)
 
-        label_mini_list.append(tk.Label(main_frame, text=player[0], fg='#80ff80', bg='#655f6a', font=text_font))
+        label_mini_list.append(tk.Label(
+            main_frame, text=player[0], fg='#80ff80', bg='#655f6a', font=text_font))
         label_mini_list[label_id].place(x=15, y=50)
         label_id += 1
 
-        label_mini_list.append(tk.Label(main_frame, text=player[1], fg='white', bg='#3c353b', font=text_font))
+        label_mini_list.append(
+            tk.Label(main_frame, text=player[1], fg='white', bg='#3c353b', font=text_font))
         if player[1] == "player 2":
             label_mini_list[label_id].place(x=1100, y=50)
         else:
@@ -188,6 +201,7 @@ class Game:
         :param player_id: the id of the player (either 0 or 1), as the elements in a list
         :return: the board with pieces for the current player
         """
+
         board_player = []
         column = [[], 1007, coord_a]
         board_player.append(column)
@@ -237,39 +251,56 @@ class Game:
         board_player.append(column)
         column = [[], 1007, coord_b]
         board_player.append(column)
-        #eddig jo a pozicionalas
-        #1 es jo
-        #2 es jo
-        #3 as jo
-        #4 es oszlop jo
-        board_player[5][0].append(tk.Button(main_frame, image=piece, command=lambda: self.move(player_id, 5, 0)))
-        #6 os oszlop jo
-        board_player[5][0].append(tk.Button(main_frame, image=piece, command=lambda: self.move(player_id, 5, 1)))
-        board_player[5][0].append(tk.Button(main_frame, image=piece, command=lambda: self.move(player_id, 5, 2)))
-        board_player[5][0].append(tk.Button(main_frame, image=piece, command=lambda: self.move(player_id, 5, 3)))
-        board_player[5][0].append(tk.Button(main_frame, image=piece, command=lambda: self.move(player_id, 5, 4)))
+        # eddig jo a pozicionalas
+        # 1 es jo
+        # 2 es jo
+        # 3 as jo
+        # 4 es oszlop jo
+        board_player[5][0].append(
+            tk.Button(main_frame, image=piece, command=lambda: self.move(player_id, 5, 0)))
+        # 6 os oszlop jo
+        board_player[5][0].append(
+            tk.Button(main_frame, image=piece, command=lambda: self.move(player_id, 5, 1)))
+        board_player[5][0].append(
+            tk.Button(main_frame, image=piece, command=lambda: self.move(player_id, 5, 2)))
+        board_player[5][0].append(
+            tk.Button(main_frame, image=piece, command=lambda: self.move(player_id, 5, 3)))
+        board_player[5][0].append(
+            tk.Button(main_frame, image=piece, command=lambda: self.move(player_id, 5, 4)))
 
-        board_player[7][0].append(tk.Button(main_frame, image=piece, command=lambda: self.move(player_id, 7, 0)))
-        board_player[7][0].append(tk.Button(main_frame, image=piece, command=lambda: self.move(player_id, 7, 1)))
-        board_player[7][0].append(tk.Button(main_frame, image=piece, command=lambda: self.move(player_id, 7, 2)))
-        #8 as jo
-        #9 es jo
-        #10 es jo
-        board_player[12][0].append(tk.Button(main_frame, image=piece, command=lambda: self.move(player_id, 12, 0)))
-        board_player[12][0].append(tk.Button(main_frame, image=piece, command=lambda: self.move(player_id, 12, 1)))
-        board_player[12][0].append(tk.Button(main_frame, image=piece, command=lambda: self.move(player_id, 12, 2)))
-        board_player[12][0].append(tk.Button(main_frame, image=piece, command=lambda: self.move(player_id, 12, 3)))
-        board_player[12][0].append(tk.Button(main_frame, image=piece, command=lambda: self.move(player_id, 12, 4)))
+        board_player[7][0].append(
+            tk.Button(main_frame, image=piece, command=lambda: self.move(player_id, 7, 0)))
+        board_player[7][0].append(
+            tk.Button(main_frame, image=piece, command=lambda: self.move(player_id, 7, 1)))
+        board_player[7][0].append(
+            tk.Button(main_frame, image=piece, command=lambda: self.move(player_id, 7, 2)))
+        # 8 as jo
+        # 9 es jo
+        # 10 es jo
+        board_player[12][0].append(tk.Button(
+            main_frame, image=piece, command=lambda: self.move(player_id, 12, 0)))
+        board_player[12][0].append(tk.Button(
+            main_frame, image=piece, command=lambda: self.move(player_id, 12, 1)))
+        board_player[12][0].append(tk.Button(
+            main_frame, image=piece, command=lambda: self.move(player_id, 12, 2)))
+        board_player[12][0].append(tk.Button(
+            main_frame, image=piece, command=lambda: self.move(player_id, 12, 3)))
+        board_player[12][0].append(tk.Button(
+            main_frame, image=piece, command=lambda: self.move(player_id, 12, 4)))
 
-        board_player[23][0].append(tk.Button(main_frame, image=piece, command=lambda: self.move(player_id, 23, 0)))
-        board_player[23][0].append(tk.Button(main_frame, image=piece, command=lambda: self.move(player_id, 23, 1)))
+        board_player[23][0].append(tk.Button(
+            main_frame, image=piece, command=lambda: self.move(player_id, 23, 0)))
+        board_player[23][0].append(tk.Button(
+            main_frame, image=piece, command=lambda: self.move(player_id, 23, 1)))
 
         for i in range(0, len(board_player)):
             for j in range(0, len(board_player[i][0])):
                 if i <= 11:
-                    board_player[i][0][j].place(x=board_player[i][1], y=(board_player[i][2] + poz[0] * j))
+                    board_player[i][0][j].place(
+                        x=board_player[i][1], y=(board_player[i][2] + poz[0] * j))
                 elif i > 11:
-                    board_player[i][0][j].place(x=board_player[i][1], y=(board_player[i][2] + poz[1] * j))
+                    board_player[i][0][j].place(
+                        x=board_player[i][1], y=(board_player[i][2] + poz[1] * j))
 
         return board_player
 
@@ -281,13 +312,18 @@ class Game:
         :param main_frame: the frame attached to the window where we put the widgets
         :return: the board represented as a list
         """
-        board_1 = self.init_board_player(main_frame, piece_image[0], 28, 710, [65, -65], 0) #jolvan a magassag
-        board_2 = self.init_board_player(main_frame, piece_image[1], 710, 28, [-65, 65], 1) #jolvan a magassag
+        board_1 = self.init_board_player(main_frame, piece_image[0], 28, 710, [
+                                         65, -65], 0)  # jolvan a magassag
+        board_2 = self.init_board_player(
+            main_frame, piece_image[1], 710, 28, [-65, 65], 1)  # jolvan a magassag
 
         board = [board_1, board_2]
-        #delete old file at every start
+        # delete old file at every start
         if os.path.exists("moves.txt"):
             os.remove("moves.txt")
+
+        if os.path.exists("eredeti.txt"):
+            os.remove("eredeti.txt")
 
         return board
 
@@ -317,9 +353,11 @@ class Game:
 
             for index in range(0, len(column[0])):
                 if id_column <= 11:
-                    column[0][index].place(x=column[1], y=(column[2] + poz_id[0] * index))
+                    column[0][index].place(x=column[1], y=(
+                        column[2] + poz_id[0] * index))
                 elif id_column > 11:
-                    column[0][index].place(x=column[1], y=(column[2] + poz_id[1] * index))
+                    column[0][index].place(x=column[1], y=(
+                        column[2] + poz_id[1] * index))
         elif replace_type == 1:
             if turn == 1:
                 poz_id = [-65, 65]
@@ -328,9 +366,11 @@ class Game:
 
             for index in range(0, len(column[0])):
                 if id_column <= 11:
-                    column[0][index].place(x=column[1], y=(column[2] + poz_id[0] * index))
+                    column[0][index].place(x=column[1], y=(
+                        column[2] + poz_id[0] * index))
                 elif id_column > 11:
-                    column[0][index].place(x=column[1], y=(column[2] + poz_id[1] * index))
+                    column[0][index].place(x=column[1], y=(
+                        column[2] + poz_id[1] * index))
 
     def exist_move(self, player_id):
         """
@@ -409,6 +449,10 @@ class Game:
         :param y: coordinates to know if the column is on top or on bottom of the game board
         :return: list containing next position possible for one piece based on the dice rolled
         """
+        print('end_piece_life:')
+        print('player_id:',player_id)
+        print('x:',x)
+        print('y:',y)
         next_pos = []
         if player_id == 0:
             if len(dice) == 2:
@@ -521,7 +565,8 @@ class Game:
                             next_pos.append([-5, 0])
 
         if len(next_pos) == 0 and y > 0 and self.name[player_id] != "PC":
-            messagebox.showerror("Backgammon!!", "You don't have where to move this piece")
+            messagebox.showerror(
+                "Backgammon!!", "You don't have where to move this piece")
 
         return next_pos
 
@@ -591,7 +636,8 @@ class Game:
                         next_pos.append([column, coord_y])
 
         if len(next_pos) == 0 and y > 0 and self.name[player_id] != "PC":
-            messagebox.showerror("Backgammon!!", "You don't have where to move this piece")
+            messagebox.showerror(
+                "Backgammon!!", "You don't have where to move this piece")
 
         return next_pos
 
@@ -626,9 +672,11 @@ class Game:
             self.board[player_id][column_taken][0][-1].destroy()
             self.board[player_id][column_taken][0].pop()
             if len(self.board[player_id][column_taken][0]) > 5:
-                self.replace_piece(self.board[player_id][column_taken], column_taken, 0)
+                self.replace_piece(
+                    self.board[player_id][column_taken], column_taken, 0)
             else:
-                self.replace_piece(self.board[player_id][column_taken], column_taken, 1)
+                self.replace_piece(
+                    self.board[player_id][column_taken], column_taken, 1)
 
             poz = len(self.board[player_id][column_pus][0]) + 1
             self.board[player_id][column_pus][0].append(tk.Button(self.main_frame, image=piece_image[player_id],
@@ -638,19 +686,23 @@ class Game:
             if column_pus <= 11:
                 self.board[player_id][column_pus][0][-1].place(x=self.board[player_id][column_pus][1],
                                                                y=(self.board[player_id][column_pus][2] + poz_id[0] * (
-                                                                       len(self.board[player_id][column_pus][0]) - 1)))
+                                                                   len(self.board[player_id][column_pus][0]) - 1)))
                 if len(self.board[player_id][column_pus][0]) > 5:
-                    self.replace_piece(self.board[player_id][column_pus], column_pus, 0)
+                    self.replace_piece(
+                        self.board[player_id][column_pus], column_pus, 0)
                 else:
-                    self.replace_piece(self.board[player_id][column_pus], column_pus, 1)
+                    self.replace_piece(
+                        self.board[player_id][column_pus], column_pus, 1)
             elif column_pus > 11:
                 self.board[player_id][column_pus][0][-1].place(x=self.board[player_id][column_pus][1],
                                                                y=(self.board[player_id][column_pus][2] + poz_id[1] * (
-                                                                       len(self.board[player_id][column_pus][0]) - 1)))
+                                                                   len(self.board[player_id][column_pus][0]) - 1)))
                 if len(self.board[player_id][column_pus][0]) > 5:
-                    self.replace_piece(self.board[player_id][column_pus], column_pus, 0)
+                    self.replace_piece(
+                        self.board[player_id][column_pus], column_pus, 0)
                 else:
-                    self.replace_piece(self.board[player_id][column_pus], column_pus, 1)
+                    self.replace_piece(
+                        self.board[player_id][column_pus], column_pus, 1)
 
             column_enemy = 23 - column_pus
 
@@ -666,9 +718,11 @@ class Game:
                                                                     y=(self.board[player_id][23 - column_pus][2] +
                                                                        poz_id[0] * (-1) * (len(self.board[player_id][23 - column_pus][0]) - 1)))
                 if len(self.board[player_id][23 - column_pus][0]) > 5:
-                    self.replace_piece(self.board[player_id][23 - column_pus], 23 - column_pus, 0)
+                    self.replace_piece(
+                        self.board[player_id][23 - column_pus], 23 - column_pus, 0)
                 else:
-                    self.replace_piece(self.board[player_id][23 - column_pus], 23 - column_pus, 1)
+                    self.replace_piece(
+                        self.board[player_id][23 - column_pus], 23 - column_pus, 1)
 
             column_enemy = column_pus
 
@@ -693,9 +747,7 @@ class Game:
         :param taken: the column from which the piece was taken
         :return: None
         """
-        
-        
-        
+
         global list_btn_option
         for btn in list_btn_option:
             btn.destroy()
@@ -703,22 +755,30 @@ class Game:
 
         self.update_board(player_id, taken, column)
         f = open("moves.txt", "a")
+        f2 = open("eredeti.txt", "a")
 
         if taken != -5:
             val_zar = taken - column
             dice.remove(val_zar)
-            if(player_id==1):
-                #terminalra iras
-                print(str(player_id)+ ":")
+            if (player_id == 1):
+                # terminalra iras
+                print(str(player_id) + ":")
                 print(-(taken-23))
                 print(-(column-23))
-                #fileba iras
-                f.write(str(player_id) + ":" + str(-(taken-23)) + "->" + str(-(column-23)) + '\n')
+                # fileba iras
+                f.write(str(player_id) + ":" + str(-(taken-23)) +
+                        "->" + str(-(column-23)) + '\n')
+                f2.write(str(player_id) + ":" + str(taken) +
+                         "=>" + str(column) + '\n')
             else:
-                print(str(player_id)+ ":")
+                print(str(player_id) + ":")
                 print(taken)
                 print(column)
-                f.write(str(player_id) + ":" + str(taken) + "->" + str(column) + '\n')
+                f.write(str(player_id) + ":" + str(taken) +
+                        "->" + str(column) + '\n')
+
+                f2.write(str(player_id) + ":" + str(taken) +
+                         "=>" + str(column) + '\n')
         else:
             val_zar = column + 1
             dice.remove(val_zar)
@@ -726,27 +786,41 @@ class Game:
             self.show_player_stats(self.main_frame, self.stats)
             if self.stats[player_id][0] > 0 and len(dice) > 0:
                 self.revive(player_id)
-            
-            if(player_id==0):
-              print('beallt:')
-              print(str(player_id)+ ":")
-              print(-(taken-23))
-              print(-(column-23))
-              if((-(taken-23)) > 23 or (-(taken-23))<0):
-                  f.write(str(player_id) + ":" + 'x' + "->" + str(-(column - 23)) + '\n')
-              else:
-                  f.write(str(player_id) + ":" + str(-(taken-23)) + "->" + str(-(column - 23)) + '\n')
+
+            if (player_id == 0):
+                print('beallt:')
+                print(str(player_id) + ":")
+                print(-(taken-23))
+                print(-(column-23))
+                if ((-(taken-23)) > 23 or (-(taken-23)) < 0):
+                    f.write(str(player_id) + ":" + 'x' +
+                            "->" + str(-(column - 23)) + '\n')
+                    f2.write(str(player_id) + ":" + str(taken) +
+                             "=>" + str(column) + '\n')
+                else:
+                    f.write(str(player_id) + ":" + str(-(taken-23)) +
+                            "->" + str(-(column - 23)) + '\n')
+                    f2.write(str(player_id) + ":" + str(taken) +
+                             "=>" + str(column) + '\n')
             else:
                 print('beallt:')
-                print(str(player_id)+ ":")
+                print(str(player_id) + ":")
                 print(taken)
                 print(column)
-                if(taken > 23 or taken <0):
-                    f.write(str(player_id) + ":" + 'x' + "->" + str(column) + '\n')
+                if (taken > 23 or taken < 0):
+                    f.write(str(player_id) + ":" + 'x' +
+                            "->" + str(column) + '\n')
+                    f2.write(str(player_id) + ":" + str(taken) +
+                             "=>" + str(column) + '\n')
                 else:
-                    f.write(str(player_id) + ":" + str(taken) + "->" + str(column) + '\n')
+                    f.write(str(player_id) + ":" + str(taken) +
+                            "->" + str(column) + '\n')
+                    f2.write(str(player_id) + ":" + str(taken) +
+                             "=>" + str(column) + '\n')
 
         f.close()
+        f2.close()
+
         global turn
         if len(dice) == 0:
             if turn == 0:
@@ -760,7 +834,63 @@ class Game:
                 label_mini_list[1].config(fg="white")
                 label_mini_list[0].config(fg="#80ff80")
             roll_button.config(state="normal")
-    #mukodik a lepes rogzites
+    # mukodik a lepes rogzites
+
+    def elore(self):
+
+        file1 = open('game1.txt', 'r')
+
+        for i in range(self.fileRow):
+            # Get next line from file
+            line = file1.readline()
+
+        masolat = line
+        endE = masolat.split(":")[1].split("=>")[1]
+        print("endE:",endE)
+        endE = endE.strip()
+
+        self.fileRow = self.fileRow + 1
+
+        nextLine = file1.readline()
+        nextLine = nextLine.strip()
+        t = int(nextLine.strip(":")[0])
+
+        
+        line = line.strip()
+        e = line.split(':')
+        # print(e)
+        m = e[1].split("=>")
+        # print(m)
+
+        pid = int(e[0])
+        honnan = int(m[0])
+        hova = int(m[1])
+
+        global turn
+
+        if endE == "end":
+            print('most end')
+            self.remove_piece2(pid, honnan)
+            if t == 0:
+                turn = 0
+            else:
+                turn = 1
+
+            return 
+
+        self.update_board(pid, honnan, hova)
+
+        
+        if t == 0:
+            turn = 0
+        else:
+            turn = 1
+
+        print(pid, honnan, hova)
+        #print("next:", t)
+
+        
+
     def options(self, player_id, x, y):
         """
         Ths method takes the options where one can move a selected piece and shows them which they are.
@@ -782,7 +912,8 @@ class Game:
         """
         global list_btn_option, turn, dice
         if len(list_btn_option) > 0:
-            messagebox.showinfo("Backgammon!!", "The piece selected previously will be deselected")
+            messagebox.showinfo(
+                "Backgammon!!", "The piece selected previously will be deselected")
             for btn in list_btn_option:
                 btn.destroy()
             list_btn_option = []
@@ -793,29 +924,40 @@ class Game:
                     next_pos = self.piece_next_place(player_id, x, y)
                     for i in range(0, len(next_pos)):
                         if next_pos[i][1] == 15:
-                            list_btn_option.append(tk.Button(self.main_frame, text=" ^ "))
-                            list_btn_option[i].place(x=(17 + self.board[player_id][next_pos[i][0]][1]), y=350)
+                            list_btn_option.append(
+                                tk.Button(self.main_frame, text=" ^ "))
+                            list_btn_option[i].place(
+                                x=(17 + self.board[player_id][next_pos[i][0]][1]), y=350)
                         else:
-                            list_btn_option.append(tk.Button(self.main_frame, text=" v "))
-                            list_btn_option[i].place(x=(17 + self.board[player_id][next_pos[i][0]][1]), y=430)
+                            list_btn_option.append(
+                                tk.Button(self.main_frame, text=" v "))
+                            list_btn_option[i].place(
+                                x=(17 + self.board[player_id][next_pos[i][0]][1]), y=430)
 
                     if len(list_btn_option) > 0:
-                        list_btn_option[0].config(command=lambda: self.move_piece(player_id, next_pos[0][0], x))
+                        list_btn_option[0].config(
+                            command=lambda: self.move_piece(player_id, next_pos[0][0], x))
                         if len(list_btn_option) == 2:
-                            list_btn_option[1].config(command=lambda: self.move_piece(player_id, next_pos[1][0], x))
+                            list_btn_option[1].config(
+                                command=lambda: self.move_piece(player_id, next_pos[1][0], x))
                 else:
                     next_pos = self.end_piece_life(player_id, x, y)
                     if self.exist_move(player_id):
                         if len(dice) > 0:
                             for i in range(0, len(next_pos)):
                                 if next_pos[i][1] == 15:
-                                    list_btn_option.append(tk.Button(self.main_frame, text=" ^ "))
-                                    list_btn_option[i].place(x=(17 + self.board[player_id][next_pos[i][0]][1]), y=350)
+                                    list_btn_option.append(
+                                        tk.Button(self.main_frame, text=" ^ "))
+                                    list_btn_option[i].place(
+                                        x=(17 + self.board[player_id][next_pos[i][0]][1]), y=350)
                                 elif next_pos[i][1] == 730:
-                                    list_btn_option.append(tk.Button(self.main_frame, text=" v "))
-                                    list_btn_option[i].place(x=(17 + self.board[player_id][next_pos[i][0]][1]), y=430)
+                                    list_btn_option.append(
+                                        tk.Button(self.main_frame, text=" v "))
+                                    list_btn_option[i].place(
+                                        x=(17 + self.board[player_id][next_pos[i][0]][1]), y=430)
                                 else:
-                                    list_btn_option.append(tk.Button(self.main_frame, text="Take out"))
+                                    list_btn_option.append(
+                                        tk.Button(self.main_frame, text="Take out"))
                                     if player_id == 0:
                                         list_btn_option[i].place(x=12, y=560)
                                     else:
@@ -823,14 +965,16 @@ class Game:
 
                             if len(list_btn_option) > 0:
                                 if list_btn_option[0]["text"] == "Take out":
-                                    list_btn_option[0].config(command=lambda: self.remove_piece(player_id, x))
+                                    list_btn_option[0].config(
+                                        command=lambda: self.remove_piece(player_id, x))
                                 else:
                                     list_btn_option[0].config(
                                         command=lambda: self.move_piece(player_id, next_pos[0][0], x))
 
                                 if len(list_btn_option) == 2:
                                     if list_btn_option[1]["text"] == "Take out":
-                                        list_btn_option[1].config(command=lambda: self.remove_piece(player_id, x))
+                                        list_btn_option[1].config(
+                                            command=lambda: self.remove_piece(player_id, x))
                                     else:
                                         list_btn_option[1].config(
                                             command=lambda: self.move_piece(player_id, next_pos[1][0], x))
@@ -877,8 +1021,6 @@ class Game:
         :return: None
         """
 
-        
-
         self.board[player_id][column][0][-1].destroy()
         self.board[player_id][column][0].pop()
         self.stats[player_id][1] += 1
@@ -905,23 +1047,27 @@ class Game:
             index.destroy()
         for index in range(0, len(list_btn_option)):
             list_btn_option.pop()
-        
-        
-        
+
         self.show_player_stats(self.main_frame, self.stats)
 
         f = open("moves.txt", "a")
+        f2 = open("eredeti.txt", "a")
+
         if player_id == 1:
-                #terminalra iras
-                print(str(player_id)+ ":")
-                print(-(column-23))
-                #fileba iras
-                f.write(str(player_id) + ":" + str(-(column-23)) + "->" + "end" + '\n')
+            # terminalra iras
+            print(str(player_id) + ":")
+            print(-(column-23))
+            # fileba iras
+            f.write(str(player_id) + ":" +
+                    str(-(column-23)) + "->" + "end" + '\n')
+            f2.write(str(player_id) + ":" + str(column) + "=>" + "end" + '\n')
         else:
-                print(str(player_id)+ ":")
-                print(column)
-                f.write(str(player_id) + ":" + str(column) + "->" + "end" + '\n')
+            print(str(player_id) + ":")
+            print(column)
+            f.write(str(player_id) + ":" + str(column) + "->" + "end" + '\n')
+            f2.write(str(player_id) + ":" + str(column) + "=>" + "end" + '\n')
         f.close()
+        f2.close()
 
         winner = who_won(self)
         if winner > 0:
@@ -941,6 +1087,20 @@ class Game:
                 label_mini_list[1].config(fg="white")
                 label_mini_list[0].config(fg="#80ff80")
 
+    def remove_piece2(self, player_id, column):
+        
+
+        self.board[player_id][column][0][-1].destroy()
+        self.board[player_id][column][0].pop()
+        
+        global list_btn_option
+        for index in list_btn_option:
+            index.destroy()
+        for index in range(0, len(list_btn_option)):
+            list_btn_option.pop()
+
+
+        
     def revive(self, player_id):
         """
         This method takes the player id to get to know which player it should "revive".
@@ -982,16 +1142,22 @@ class Game:
 
             for i in range(0, len(possible_position)):
                 if possible_position[i][1] == 15:
-                    list_btn_option.append(tk.Button(self.main_frame, text=" ^ "))
-                    list_btn_option[i].place(x=(17 + self.board[player_id][possible_position[i][0]][1]), y=350)
+                    list_btn_option.append(
+                        tk.Button(self.main_frame, text=" ^ "))
+                    list_btn_option[i].place(
+                        x=(17 + self.board[player_id][possible_position[i][0]][1]), y=350)
                 else:
-                    list_btn_option.append(tk.Button(self.main_frame, text=" v "))
-                    list_btn_option[i].place(x=(17 + self.board[player_id][possible_position[i][0]][1]), y=430)
+                    list_btn_option.append(
+                        tk.Button(self.main_frame, text=" v "))
+                    list_btn_option[i].place(
+                        x=(17 + self.board[player_id][possible_position[i][0]][1]), y=430)
 
             if len(list_btn_option) > 0:
-                list_btn_option[0].config(command=lambda: self.move_piece(player_id, possible_position[0][0], -5))
+                list_btn_option[0].config(command=lambda: self.move_piece(
+                    player_id, possible_position[0][0], -5))
                 if len(list_btn_option) == 2:
-                    list_btn_option[1].config(command=lambda: self.move_piece(player_id, possible_position[1][0], -5))
+                    list_btn_option[1].config(command=lambda: self.move_piece(
+                        player_id, possible_position[1][0], -5))
 
             if self.name[player_id] == "PC":
                 choice = random.randrange(0, len(list_btn_option))
@@ -1031,7 +1197,8 @@ class Game:
                                         "on the board first.")
 
         else:
-            messagebox.showerror("Backgammon!!", "You must roll the dice first")
+            messagebox.showerror(
+                "Backgammon!!", "You must roll the dice first")
 
     def pc_move(self):
         """
@@ -1084,32 +1251,44 @@ class Game:
                         next_pos = self.piece_next_place(1, x, y)
                         for i in range(0, len(next_pos)):
                             if next_pos[i][1] == 15:
-                                list_btn_option.append(tk.Button(self.main_frame, text=" ^ "))
-                                list_btn_option[i].place(x=(17 + self.board[1][next_pos[i][0]][1]), y=350)
+                                list_btn_option.append(
+                                    tk.Button(self.main_frame, text=" ^ "))
+                                list_btn_option[i].place(
+                                    x=(17 + self.board[1][next_pos[i][0]][1]), y=350)
                             else:
-                                list_btn_option.append(tk.Button(self.main_frame, text=" v "))
-                                list_btn_option[i].place(x=(17 + self.board[1][next_pos[i][0]][1]), y=430)
+                                list_btn_option.append(
+                                    tk.Button(self.main_frame, text=" v "))
+                                list_btn_option[i].place(
+                                    x=(17 + self.board[1][next_pos[i][0]][1]), y=430)
 
                         if len(list_btn_option) > 0:
-                            list_btn_option[0].config(command=lambda: self.move_piece(1, next_pos[0][0], x))
+                            list_btn_option[0].config(
+                                command=lambda: self.move_piece(1, next_pos[0][0], x))
                             if len(list_btn_option) == 2:
-                                list_btn_option[1].config(command=lambda: self.move_piece(1, next_pos[1][0], x))
+                                list_btn_option[1].config(
+                                    command=lambda: self.move_piece(1, next_pos[1][0], x))
 
                             if self.name[1] == "PC":
-                                move = random.randrange(0, len(list_btn_option))
+                                move = random.randrange(
+                                    0, len(list_btn_option))
                                 list_btn_option[move].invoke()
 
                     else:
                         next_pos = self.end_piece_life(1, x, y)
                         for i in range(0, len(next_pos)):
                             if next_pos[i][1] == 15:
-                                list_btn_option.append(tk.Button(self.main_frame, text=" ^ "))
-                                list_btn_option[i].place(x=(17 + self.board[1][next_pos[i][0]][1]), y=350)
+                                list_btn_option.append(
+                                    tk.Button(self.main_frame, text=" ^ "))
+                                list_btn_option[i].place(
+                                    x=(17 + self.board[1][next_pos[i][0]][1]), y=350)
                             elif next_pos[i][1] == 730:
-                                list_btn_option.append(tk.Button(self.main_frame, text=" v "))
-                                list_btn_option[i].place(x=(17 + self.board[1][next_pos[i][0]][1]), y=430)
+                                list_btn_option.append(
+                                    tk.Button(self.main_frame, text=" v "))
+                                list_btn_option[i].place(
+                                    x=(17 + self.board[1][next_pos[i][0]][1]), y=430)
                             else:
-                                list_btn_option.append(tk.Button(self.main_frame, text="Take out"))
+                                list_btn_option.append(
+                                    tk.Button(self.main_frame, text="Take out"))
                                 if turn == 0:
                                     list_btn_option[i].place(x=12, y=560)
                                 else:
@@ -1117,18 +1296,23 @@ class Game:
 
                         if len(list_btn_option) > 0:
                             if list_btn_option[0]["text"] == "Take out":
-                                list_btn_option[0].config(command=lambda: self.remove_piece(1, x))
+                                list_btn_option[0].config(
+                                    command=lambda: self.remove_piece(1, x))
                             else:
-                                list_btn_option[0].config(command=lambda: self.move_piece(1, next_pos[0][0], x))
+                                list_btn_option[0].config(
+                                    command=lambda: self.move_piece(1, next_pos[0][0], x))
 
                             if len(list_btn_option) == 2:
                                 if list_btn_option[1]["text"] == "Take out":
-                                    list_btn_option[1].config(command=lambda: self.remove_piece(1, x))
+                                    list_btn_option[1].config(
+                                        command=lambda: self.remove_piece(1, x))
                                 else:
-                                    list_btn_option[1].config(command=lambda: self.move_piece(1, next_pos[1][0], x))
+                                    list_btn_option[1].config(
+                                        command=lambda: self.move_piece(1, next_pos[1][0], x))
 
                             if self.name[1] == "PC":
-                                move = random.randrange(0, len(list_btn_option))
+                                move = random.randrange(
+                                    0, len(list_btn_option))
                                 list_btn_option[move].invoke()
 
         if len(dice) > 0:
@@ -1274,6 +1458,8 @@ def show_winner(window, id_player, player):
     :type player: Game
     :return: None
     """
+    shutil.copyfile("./eredeti.txt", "./game1.txt")
+
     roll_button.config(state="disabled")
     time.sleep(1)
     if id_player == 1:
@@ -1300,7 +1486,8 @@ def show_winner(window, id_player, player):
     canvas.create_oval(200, 100, 400, 300, fill=color_codes[color])
     text = text + " won!!"
     text_font = font.Font(size=20)
-    label_winner = tk.Label(canvas, text=text, fg="#000000", bg=color_codes[color], font=text_font)
+    label_winner = tk.Label(canvas, text=text, fg="#000000",
+                            bg=color_codes[color], font=text_font)
     canvas.create_window(300, 200, window=label_winner)
 
     # window.mainloop
@@ -1333,6 +1520,24 @@ def player_gui_init(window):
                             command=lambda: roll_dice(main_frame, game))
     roll_button.place(x=360, y=380)
 
+# lehet nem kell
+
+
+def player_gui_init2(window):
+
+    main_frame = tk.Frame(window, width=1200, height=800)
+    main_frame.pack(side="top", expand=False, fill="both")
+
+    global background, game, dice_image, roll_button
+
+    background = tk.PhotoImage(file="assets/xtabla_1202x805.png")
+    label_background = tk.Label(main_frame, image=background)
+    label_background.place(x=-3, y=-2)
+
+    game = Game(window, main_frame, "replay", "replay")
+
+    dice_image = []
+
 
 def pc_gui_init(window):
     """
@@ -1348,7 +1553,7 @@ def pc_gui_init(window):
     main_frame.pack(side="top", expand=False, fill="both")
 
     global background, game, dice_image, roll_button
-    background = tk.PhotoImage(file="assets/board2.png")
+    background = tk.PhotoImage(file="assets/xtabla_1202x805.png")
     label_background = tk.Label(main_frame, image=background)
     label_background.place(x=-3, y=-2)
 
@@ -1429,6 +1634,18 @@ def main_menu(window):
     button_list.append(tk.Button(main_frame, text="Player vs PC", bg="#c2fcdd", fg="#002e1d", font=text_font,
                                  command=lambda: pc_callback(window)))
     button_list[button_id].place(x=520, y=460)
+    button_id += 1
+
+    def replay(main_window):
+
+        main_window.destroy()
+        new_window = create_window()
+        player_gui_init2(new_window)
+        replayTF = 1
+
+    button_list.append(tk.Button(main_frame, text="Replay", bg="#c2fcdd", fg="#002e1d", font=text_font,
+                                 command=lambda: replay(window)))
+    button_list[button_id].place(x=520, y=520)
     button_id += 1
 
     window.mainloop()
